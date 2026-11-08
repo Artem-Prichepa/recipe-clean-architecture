@@ -1,10 +1,11 @@
 import '../../domain/entities/ingredient.dart';
 import '../../domain/entities/recipe.dart';
 import '../../domain/repositories/recipe_repository.dart';
+import '../config/app_config.dart';
 
 class InMemoryRecipeRepository implements RecipeRepository {
   static const Recipe _recipe = Recipe(
-    name: 'Student food',
+    name: recipeName,
     baseServings: 2,
     ingredients: [
       Ingredient("Хліб", 2, "шт"),

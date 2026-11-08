@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lab_layout/models/ingredient.dart';
-import 'package:lab_layout/recipeNotifier/recipe_notifier.dart';
-import 'package:lab_layout/recipeNotifier/notes_notifier.dart';
+import 'package:lab_layout/presentation/notifiers/recipe_notifier.dart';
+import 'package:lab_layout/presentation/notifiers/notes_notifier.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,22 +11,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // region ingredients counter
-  final List<Ingredient> _ingredients = [
-    Ingredient("Хліб", 2, "шт"),
-    Ingredient("Мазік", 100, "г"),
-    Ingredient("Ковбаса", 200, "г"),
-    Ingredient("Кептчуп", 100, "г"),
-    Ingredient("Сир", 200, "г"),
-    Ingredient("Помідор", 1, "шт"),
-  ];
-  //endregion
-
-  static const String _dishName = 'Student food';
   bool _showIngredients = true;
   bool _showSteps = false;
   final TextEditingController _noteController = TextEditingController();
-  final int _baseServings = 2;
 
   void _onOpenNotes() {
     showDialog(
@@ -72,7 +58,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onToggleFavorite() {
-    context.read<RecipeNotifier>().toggleFavorite(_dishName);
+    final notifier = context.read<RecipeNotifier>();
+    notifier.toggleFavorite(notifier.recipe.name);
   }
 
   void _onIncrementServings() {
@@ -109,6 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final bool isNarrow = MediaQuery.of(context).size.width < 500;
     final colors = Theme.of(context).colorScheme;
+    final dishName = context.read<RecipeNotifier>().recipe.name;
     // final texts = Theme.of(context).textTheme;
 
     return Scaffold(
@@ -126,12 +114,9 @@ class _HomeScreenState extends State<HomeScreen> {
           return Colors.transparent;
         }),
         title: isNarrow
-            ? Text(
-                'Student food',
-                style: TextStyle(fontWeight: FontWeight(600)),
-              )
+            ? Text(dishName, style: TextStyle(fontWeight: FontWeight(600)))
             : Text(
-                "Назва страви: 'Student food'",
+                "Назва страви: '$dishName'",
                 style: TextStyle(fontWeight: FontWeight(600)),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -252,7 +237,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final bool isNarrow = MediaQuery.of(context).size.width < 500;
     final colors = Theme.of(context).colorScheme;
     final texts = Theme.of(context).textTheme;
-    final isFav = context.watch<RecipeNotifier>().isFavorite(_dishName);
+    final recipeNotifier = context.watch<RecipeNotifier>();
+    final isFav = recipeNotifier.isFavorite(recipeNotifier.recipe.name);
 
     return Stack(
       children: [
@@ -419,7 +405,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _ingredientsBlock(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final texts = Theme.of(context).textTheme;
-    final servings = context.watch<RecipeNotifier>().servings;
+    final ingredients = context.watch<RecipeNotifier>().ingredients;
 
     return Center(
       child: ConstrainedBox(
@@ -445,15 +431,14 @@ class _HomeScreenState extends State<HomeScreen> {
               Expanded(
                 child: ListView(
                   padding: EdgeInsets.fromLTRB(30, 5, 30, 15),
-                  children: _ingredients.map((item) {
-                    final amount = item.amount * servings / _baseServings;
+                  children: ingredients.map((item) {
                     return Card(
                       key: ValueKey(item.name),
                       margin: EdgeInsets.all(5),
                       child: ListTile(
                         title: Text(item.name, style: texts.labelLarge),
                         trailing: Text(
-                          "${amount.toStringAsFixed(0)} ${item.unit}",
+                          "${item.amount.toStringAsFixed(0)} ${item.unit}",
                           style: texts.labelLarge,
                         ),
                       ),
@@ -473,6 +458,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _stepsBlock(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final texts = Theme.of(context).textTheme;
+    final steps = context.read<RecipeNotifier>().recipe.steps;
 
     return Center(
       child: ConstrainedBox(
@@ -498,8 +484,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Expanded(
                 child: ListView(
                   padding: EdgeInsets.fromLTRB(30, 5, 30, 15),
-                  children: [
-                    Card(
+                  children: List.generate(steps.length, (index) {
+                    return Card(
                       margin: EdgeInsets.all(5),
                       child: Padding(
                         padding: EdgeInsets.all(5),
@@ -509,121 +495,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             CircleAvatar(
                               backgroundColor: colors.primary,
                               foregroundColor: colors.onPrimary,
-                              child: Text("1"),
+                              child: Text("${index + 1}"),
                             ),
                             SizedBox(width: 5),
-                            Expanded(
-                              child: Text(
-                                "Покласти сир на нижню булочку, а потім намастити сир кептчунезом",
-                              ),
-                            ),
+                            Expanded(child: Text(steps[index])),
                           ],
                         ),
                       ),
-                    ),
-                    Card(
-                      margin: EdgeInsets.all(5),
-                      child: Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: colors.primary,
-                              foregroundColor: colors.onPrimary,
-                              child: Text("2"),
-                            ),
-                            SizedBox(width: 5),
-                            Expanded(
-                              child: Text(
-                                "Нарізати хліб, сир, ковбасу та помідори",
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Card(
-                      margin: EdgeInsets.all(5),
-                      child: Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: colors.primary,
-                              foregroundColor: colors.onPrimary,
-                              child: Text("3"),
-                            ),
-                            SizedBox(width: 5),
-                            Expanded(child: Text("Змішати майонез і кетчуп")),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Card(
-                      margin: EdgeInsets.all(5),
-                      child: Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: colors.primary,
-                              foregroundColor: colors.onPrimary,
-                              child: Text("4"),
-                            ),
-                            SizedBox(width: 5),
-                            Expanded(
-                              child: Text(
-                                "Покласти сир на нижню булочку, а потім намастити сир кетчунезом",
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Card(
-                      margin: EdgeInsets.all(5),
-                      child: Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: colors.primary,
-                              foregroundColor: colors.onPrimary,
-                              child: Text("5"),
-                            ),
-                            SizedBox(width: 5),
-                            Expanded(
-                              child: Text(
-                                "Додати всі інші інгредієнти і смакувати",
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Card(
-                      margin: EdgeInsets.all(5),
-                      child: Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: colors.primary,
-                              foregroundColor: colors.onPrimary,
-                              child: Text("6"),
-                            ),
-                            SizedBox(width: 5),
-                            Expanded(child: Text("Насолоджуйтесь")),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                    );
+                  }),
                 ),
               ),
             ],

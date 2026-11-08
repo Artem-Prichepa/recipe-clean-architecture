@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:lab_layout/domain/entities/ingredient.dart';
 import 'package:lab_layout/recipeNotifier/recipe_notifier.dart';
 import 'package:lab_layout/recipeNotifier/notes_notifier.dart';
@@ -14,12 +14,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   // region ingredients counter
   final List<Ingredient> _ingredients = [
-    Ingredient("РҐР»С–Р±", 2, "С€С‚"),
-    Ingredient("РњР°Р·С–Рє", 100, "Рі"),
-    Ingredient("РљРѕРІР±Р°СЃР°", 200, "Рі"),
-    Ingredient("РљРµРїС‚С‡СѓРї", 100, "Рі"),
-    Ingredient("РЎРёСЂ", 200, "Рі"),
-    Ingredient("РџРѕРјС–РґРѕСЂ", 1, "С€С‚"),
+    Ingredient("Хліб", 2, "шт"),
+    Ingredient("Мазік", 100, "г"),
+    Ingredient("Ковбаса", 200, "г"),
+    Ingredient("Кептчуп", 100, "г"),
+    Ingredient("Сир", 200, "г"),
+    Ingredient("Помідор", 1, "шт"),
   ];
   //endregion
 
@@ -39,21 +39,21 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             TextField(
               controller: _noteController,
-              decoration: InputDecoration(hintText: "РќРѕРІР° РЅРѕС‚Р°С‚РєР°"),
+              decoration: InputDecoration(hintText: "Нова нотатка"),
             ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: Text("Р—Р°РєСЂРёС‚Рё"),
+            child: Text("Закрити"),
           ),
           TextButton(
             onPressed: () {
               _onAddNote();
               Navigator.pop(ctx);
             },
-            child: Text("Р—Р±РµСЂРµРіС‚Рё"),
+            child: Text("Зберегти"),
           ),
         ],
       ),
@@ -131,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontWeight: FontWeight(600)),
               )
             : Text(
-                "РќР°Р·РІР° СЃС‚СЂР°РІРё: 'Student food'",
+                "Назва страви: 'Student food'",
                 style: TextStyle(fontWeight: FontWeight(600)),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -145,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: PopupMenuButton<String>(
                 offset: Offset(0, 45),
                 icon: Icon(Icons.note_alt_outlined),
-                tooltip: "РќРѕС‚Р°С‚РєРё",
+                tooltip: "Нотатки",
                 itemBuilder: (ctx) => [
                   ...notifier.notes.map(
                     (note) => PopupMenuItem<String>(
@@ -171,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Icon(Icons.add),
                         SizedBox(width: 8),
-                        Text("РќРѕРІР° РЅРѕС‚Р°С‚РєР°"),
+                        Text("Нова нотатка"),
                       ],
                     ),
                   ),
@@ -187,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
               label: Text("$count"),
               isLabelVisible: count > 0,
               child: PopupMenuButton<String>(
-                tooltip: "РЈР»СЋР±Р»РµРЅРµ",
+                tooltip: "Улюблене",
                 padding: EdgeInsetsGeometry.all(2),
                 offset: Offset(-10, 40),
                 iconSize: 20,
@@ -233,13 +233,13 @@ class _HomeScreenState extends State<HomeScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ChoiceChip(
-          label: Text("Р†РЅРіСЂРµРґС–С”РЅС‚Рё"),
+          label: Text("Інгредієнти"),
           selected: _showIngredients,
           onSelected: (_) => _onShowIngredients(),
         ),
         SizedBox(width: 10),
         ChoiceChip(
-          label: Text("РљСЂРѕРєРё"),
+          label: Text("Кроки"),
           selected: _showSteps,
           onSelected: (_) => _onShowSteps(),
         ),
@@ -257,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Stack(
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(16, 20, 16, 4), // РІС–РґСЃС‚СѓРїРё Р· СѓСЃС–С… Р±РѕРєС–РІ
+          padding: EdgeInsets.fromLTRB(16, 20, 16, 4), // відступи з усіх боків
           child: Stack(
             children: [
               Container(
@@ -316,7 +316,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     child: Text(
-                      "РЎРєР»Р°РґРЅС–СЃС‚СЊ: Р’РёСЃРѕРєР°",
+                      "Складність: Висока",
                       style: texts.labelLarge?.copyWith(
                         color: colors.onPrimary,
                       ),
@@ -356,7 +356,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               Text(
-                "Р Р•Р¦Р•РџРў",
+                "РЕЦЕПТ",
                 style: texts.titleLarge?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: colors.onSurface,
@@ -369,7 +369,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(16, 1, 16, 0),
                       child: Text(
-                        "Р§Р°СЃ РїСЂРёРіРѕС‚СѓРІР°РЅРЅСЏ: \n5С…РІ",
+                        "Час приготування: \n5хв",
                         textAlign: TextAlign.center,
                         style: texts.titleMedium,
                       ),
@@ -379,7 +379,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       children: [
                         Text(
-                          "РљС–Р»СЊРєС–СЃС‚СЊ РїРѕСЂС†С–Р№:",
+                          "Кількість порцій:",
                           textAlign: TextAlign.center,
                           style: texts.titleMedium,
                         ),
@@ -435,7 +435,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               Text(
-                "Р†РЅРіСЂРµРґС–С”РЅС‚Рё",
+                "Інгредієнти",
                 style: texts.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w900,
                   color: colors.primary,
@@ -488,7 +488,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               Text(
-                "РљСЂРѕРєРё",
+                "Кроки",
                 style: texts.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w900,
                   color: colors.primary,
@@ -514,7 +514,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(width: 5),
                             Expanded(
                               child: Text(
-                                "РџРѕРєР»Р°СЃС‚Рё СЃРёСЂ РЅР° РЅРёР¶РЅСЋ Р±СѓР»РѕС‡РєСѓ, Р° РїРѕС‚С–Рј РЅР°РјР°СЃС‚РёС‚Рё СЃРёСЂ РєРµРїС‚С‡СѓРЅРµР·РѕРј",
+                                "Покласти сир на нижню булочку, а потім намастити сир кептчунезом",
                               ),
                             ),
                           ],
@@ -536,7 +536,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(width: 5),
                             Expanded(
                               child: Text(
-                                "РќР°СЂС–Р·Р°С‚Рё С…Р»С–Р±, СЃРёСЂ, РєРѕРІР±Р°СЃСѓ С‚Р° РїРѕРјС–РґРѕСЂРё",
+                                "Нарізати хліб, сир, ковбасу та помідори",
                               ),
                             ),
                           ],
@@ -556,7 +556,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Text("3"),
                             ),
                             SizedBox(width: 5),
-                            Expanded(child: Text("Р—РјС–С€Р°С‚Рё РјР°Р№РѕРЅРµР· С– РєРµС‚С‡СѓРї")),
+                            Expanded(child: Text("Змішати майонез і кетчуп")),
                           ],
                         ),
                       ),
@@ -576,7 +576,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(width: 5),
                             Expanded(
                               child: Text(
-                                "РџРѕРєР»Р°СЃС‚Рё СЃРёСЂ РЅР° РЅРёР¶РЅСЋ Р±СѓР»РѕС‡РєСѓ, Р° РїРѕС‚С–Рј РЅР°РјР°СЃС‚РёС‚Рё СЃРёСЂ РєРµС‚С‡СѓРЅРµР·РѕРј",
+                                "Покласти сир на нижню булочку, а потім намастити сир кетчунезом",
                               ),
                             ),
                           ],
@@ -598,7 +598,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(width: 5),
                             Expanded(
                               child: Text(
-                                "Р”РѕРґР°С‚Рё РІСЃС– С–РЅС€С– С–РЅРіСЂРµРґС–С”РЅС‚Рё С– СЃРјР°РєСѓРІР°С‚Рё",
+                                "Додати всі інші інгредієнти і смакувати",
                               ),
                             ),
                           ],
@@ -618,7 +618,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Text("6"),
                             ),
                             SizedBox(width: 5),
-                            Expanded(child: Text("РќР°СЃРѕР»РѕРґР¶СѓР№С‚РµСЃСЊ")),
+                            Expanded(child: Text("Насолоджуйтесь")),
                           ],
                         ),
                       ),

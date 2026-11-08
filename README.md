@@ -1,17 +1,17 @@
-# lab_layout
+﻿# Recipe App
 
-A new Flutter project.
+Flutter-застосунок для перегляду рецепта «Student food» (бутерброд зі студентської кухні): інгредієнти, кроки приготування, нотатки та улюблене.
 
-## Getting Started
+## Можливості
+- перегляд інгредієнтів із автоматичним перерахунком за кількістю порцій (від 1 до 12)
+- додавання та видалення власних нотаток до рецепта
+- позначення страви як улюбленої з лічильником у верхній панелі
+- перемикання між вкладками «Інгредієнти» та «Кроки»
 
-This project is a starting point for a Flutter application.
+## Гілки
+- `main` — стабільний код
+- `develop` — інтеграційна гілка
+- `feature/*` — гілки під конкретні задачі
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Архітектура
+Схему шарів буде додано пізніше.

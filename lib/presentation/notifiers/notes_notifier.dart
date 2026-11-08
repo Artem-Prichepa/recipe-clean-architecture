@@ -1,17 +1,24 @@
 import 'package:flutter/foundation.dart';
+import 'package:lab_layout/application/use_cases/add_note_use_case.dart';
+import 'package:lab_layout/application/use_cases/delete_note_use_case.dart';
 
-class NotesNotifier extends ChangeNotifier  {                  
-  final List<String> _notes = [];                
+class NotesNotifier extends ChangeNotifier {
+  final AddNoteUseCase _addNote;
+  final DeleteNoteUseCase _deleteNote;
 
-  List<String> get notes => List.unmodifiable(_notes);   
+  List<String> _notes = const [];
+
+  NotesNotifier({required this._addNote, required this._deleteNote});
+
+  List<String> get notes => _notes;
 
   void addNote(String text) {
-    _notes.add(text);                           
-    notifyListeners();                                  
+    _notes = _addNote(text);
+    notifyListeners();
   }
 
   void deleteNote(String note) {
-    _notes.remove(note);
+    _notes = _deleteNote(note);
     notifyListeners();
   }
 }

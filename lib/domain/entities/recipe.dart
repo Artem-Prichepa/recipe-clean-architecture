@@ -11,5 +11,5 @@ class Recipe {
     required this.baseServings,
     required this.ingredients,
     required this.steps,
-  });
+  }) : assert(baseServings > 0, 'baseServings має бути додатним');
 }

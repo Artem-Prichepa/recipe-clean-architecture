@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:lab_layout/application/use_cases/get_favorites_use_case.dart';
 import 'package:lab_layout/application/use_cases/get_recipe_use_case.dart';
 import 'package:lab_layout/application/use_cases/scale_ingredients_use_case.dart';
 import 'package:lab_layout/application/use_cases/toggle_favorite_use_case.dart';
@@ -12,13 +13,15 @@ class RecipeNotifier extends ChangeNotifier {
   final Recipe recipe;
   late int _servings;
   late List<Ingredient> _ingredients;
-  Set<String> _favorites = const {};
+  Set<String> _favorites;
 
   RecipeNotifier({
     required GetRecipeUseCase getRecipe,
     required this._scaleIngredients,
+    required GetFavoritesUseCase getFavorites,
     required this._toggleFavorite,
-  }) : recipe = getRecipe() {
+  }) : recipe = getRecipe(),
+       _favorites = getFavorites() {
     _servings = recipe.baseServings;
     _ingredients = _scaleIngredients(recipe, _servings);
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lab_layout/application/use_cases/add_note_use_case.dart';
 import 'package:lab_layout/application/use_cases/delete_note_use_case.dart';
+import 'package:lab_layout/application/use_cases/get_notes_use_case.dart';
 import 'package:lab_layout/infrastructure/repositories/in_memory_notes_repository.dart';
 import 'package:lab_layout/main.dart';
 import 'package:lab_layout/presentation/notifiers/notes_notifier.dart';
@@ -42,12 +43,16 @@ void main() {
     expect(find.text('Насолоджуйтесь'), findsOneWidget);
   });
 
-  test('NotesNotifier додає та видаляє нотатки через use cases', () {
-    final repository = InMemoryNotesRepository();
-    final notifier = NotesNotifier(
+  NotesNotifier createNotesNotifier(InMemoryNotesRepository repository) {
+    return NotesNotifier(
+      getNotes: GetNotesUseCase(repository),
       addNote: AddNoteUseCase(repository),
       deleteNote: DeleteNoteUseCase(repository),
     );
+  }
+
+  test('NotesNotifier додає та видаляє нотатки через use cases', () {
+    final notifier = createNotesNotifier(InMemoryNotesRepository());
 
     notifier.addNote('  купити сир  ');
     notifier.addNote('   ');
@@ -55,5 +60,11 @@ void main() {
 
     notifier.deleteNote('купити сир');
     expect(notifier.notes, isEmpty);
+  });
+
+  test('NotesNotifier читає початковий стан із репозиторію', () {
+    final repository = InMemoryNotesRepository()..add('збережена нотатка');
+
+    expect(createNotesNotifier(repository).notes, ['збережена нотатка']);
   });
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lab_layout/application/use_cases/add_note_use_case.dart';
 import 'package:lab_layout/application/use_cases/delete_note_use_case.dart';
+import 'package:lab_layout/application/use_cases/get_favorites_use_case.dart';
+import 'package:lab_layout/application/use_cases/get_notes_use_case.dart';
 import 'package:lab_layout/application/use_cases/get_recipe_use_case.dart';
 import 'package:lab_layout/application/use_cases/scale_ingredients_use_case.dart';
 import 'package:lab_layout/application/use_cases/toggle_favorite_use_case.dart';
@@ -27,7 +29,9 @@ Widget createApp() {
   // Application
   final getRecipe = GetRecipeUseCase(recipeRepository);
   final scaleIngredients = ScaleIngredientsUseCase();
+  final getFavorites = GetFavoritesUseCase(favoritesRepository);
   final toggleFavorite = ToggleFavoriteUseCase(favoritesRepository);
+  final getNotes = GetNotesUseCase(notesRepository);
   final addNote = AddNoteUseCase(notesRepository);
   final deleteNote = DeleteNoteUseCase(notesRepository);
 
@@ -38,11 +42,16 @@ Widget createApp() {
         create: (_) => RecipeNotifier(
           getRecipe: getRecipe,
           scaleIngredients: scaleIngredients,
+          getFavorites: getFavorites,
           toggleFavorite: toggleFavorite,
         ),
       ),
       ChangeNotifierProvider(
-        create: (_) => NotesNotifier(addNote: addNote, deleteNote: deleteNote),
+        create: (_) => NotesNotifier(
+          getNotes: getNotes,
+          addNote: addNote,
+          deleteNote: deleteNote,
+        ),
       ),
     ],
     child: const MyApp(),

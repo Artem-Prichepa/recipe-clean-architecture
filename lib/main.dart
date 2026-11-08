@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lab_layout/recipeNotifier/notes_notifier.dart';
-import 'package:lab_layout/recipeNotifier/recipe_notifier.dart';
+import 'package:lab_layout/presentation/notifiers/notes_notifier.dart';
+import 'package:lab_layout/presentation/notifiers/recipe_notifier.dart';
 import 'package:provider/provider.dart';
-import 'screens/home_screen.dart';
+import 'package:lab_layout/presentation/screens/home_screen.dart';
 
 void main() {
   runApp(

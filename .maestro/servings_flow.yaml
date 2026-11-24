@@ -1,0 +1,17 @@
+appId: ua.vtfk.lab_layout
+---
+# Застосунок стартує з чистим станом
+- launchApp:
+    clearState: true
+
+# Блок порцій видимий, початкове значення 2
+- assertVisible: "Кількість порцій:"
+- assertVisible: "2"
+
+# Кнопка «+» (tooltip «Більше порцій») збільшує порції до 3
+- tapOn: "Більше порцій"
+- assertVisible: "3"
+
+# Кнопка «−» (tooltip «Менше порцій») повертає порції до 2
+- tapOn: "Менше порцій"
+- assertVisible: "2"

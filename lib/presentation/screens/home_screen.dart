@@ -375,6 +375,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             IconButton(
                               onPressed: _onDecrementServings,
                               icon: Icon(Icons.remove),
+                              tooltip: "Менше порцій",
                             ),
                             Consumer<RecipeNotifier>(
                               builder: (ctx, notifier, _) => Text(
@@ -385,6 +386,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             IconButton(
                               onPressed: _onIncrementServings,
                               icon: Icon(Icons.add),
+                              tooltip: "Більше порцій",
                             ),
                           ],
                         ),
